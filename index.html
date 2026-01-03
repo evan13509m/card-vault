@@ -1,0 +1,1479 @@
+responses.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gridiron Vault Pro</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.0/tesseract.min.js"></script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  background: rgba(30, 41, 59, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #38bdf8, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.8);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+nav button {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 20px;
+  background: #1e293b;
+  color: #38bdf8;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+nav button:hover {
+  background: #334155;
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+nav button.active {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.scan-container {
+  background: rgba(30, 41, 59, 0.8);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.file-input-label {
+  display: inline-block;
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #38bdf8, #22d3ee);
+  color: #0f172a;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  margin: 20px 0;
+}
+
+.file-input-label:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.scan-status {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #22d3ee;
+  min-height: 25px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(56, 189, 248, 0.3);
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: rgba(30, 41, 59, 0.8);
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #334155;
+}
+
+.stat-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #334155;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #38bdf8, #22d3ee);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+}
+
+.psa-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+}
+
+.psa-badge.grade-10 { background: linear-gradient(135deg, #10b981, #059669); }
+.psa-badge.grade-9 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.psa-badge.grade-8 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+.player-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.card-details {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #334155;
+}
+
+.card-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #22d3ee;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8, #22d3ee);
+  color: #0f172a;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.trade-section {
+  background: rgba(30, 41, 59, 0.8);
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.trade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #334155;
+}
+
+.trade-participant {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.trade-arrow {
+  font-size: 1.5rem;
+  color: #22d3ee;
+}
+
+.trade-request {
+  background: rgba(16, 185, 129, 0.1);
+  border: 2px solid #10b981;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.trade-info {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.add-card-form {
+  background: rgba(30, 41, 59, 0.8);
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 12px;
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #10b981;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <header>
+    <h1>🏈 Gridiron Vault Pro</h1>
+    <p class="tagline">Professional Football Card Collection & Trading Platform</p>
+  </header>
+
+  <nav>
+    <button onclick="app.showSection('scan')" data-section="scan">📸 Scan Card</button>
+    <button onclick="app.showSection('add')" data-section="add">➕ Add Manually</button>
+    <button onclick="app.showSection('collection')" data-section="collection">📦 Collection</button>
+    <button onclick="app.showSection('trade')" data-section="trade">🔁 Trade Hub</button>
+  </nav>
+
+  <div id="scan" class="section">
+    <div class="scan-container">
+      <h2 style="margin-bottom: 20px;">📸 Scan Football Card</h2>
+      <p style="color: #94a3b8; margin-bottom: 20px;">Upload an image of your card to automatically detect player and estimate value</p>
+      
+      <label for="fileInput" class="file-input-label">
+        📷 Choose Card Image
+      </label>
+      <input type="file" id="fileInput" accept="image/*" onchange="app.scanCard(event)">
+      
+      <div id="scanStatus" class="scan-status"></div>
+    </div>
+  </div>
+
+  <div id="add" class="section">
+    <div class="add-card-form">
+      <h2 style="margin-bottom: 25px;">➕ Add Card Manually</h2>
+      
+      <div class="form-group">
+        <label class="form-label">Player Name</label>
+        <input type="text" id="playerName" class="form-input" placeholder="e.g., Joe Burrow">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Team</label>
+          <input type="text" id="team" class="form-input" placeholder="e.g., Cincinnati Bengals">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <input type="text" id="year" class="form-input" placeholder="e.g., 2020">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Card Number</label>
+          <input type="text" id="cardNumber" class="form-input" placeholder="e.g., #101">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">PSA Grade</label>
+          <select id="psaGrade" class="form-select">
+            <option value="10">PSA 10 - GEM-MT</option>
+            <option value="9">PSA 9 - MINT</option>
+            <option value="8">PSA 8 - NM-MT</option>
+            <option value="7">PSA 7 - NM</option>
+            <option value="6">PSA 6 - EX-MT</option>
+            <option value="5">PSA 5 - EX</option>
+            <option value="4">PSA 4 - VG-EX</option>
+            <option value="3">PSA 3 - VG</option>
+            <option value="2">PSA 2 - GOOD</option>
+            <option value="1">PSA 1 - PR</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Estimated Value ($)</label>
+        <input type="number" id="cardValue" class="form-input" placeholder="0.00" step="0.01">
+      </div>
+      
+      <button onclick="app.addCardManually()" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+        ➕ Add to Collection
+      </button>
+    </div>
+  </div>
+
+  <div id="collection" class="section">
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Total Cards</div>
+        <div class="stat-value" id="totalCards">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Collection Value</div>
+        <div class="stat-value" id="totalValue">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average Grade</div>
+        <div class="stat-value" id="avgGrade">-</div>
+      </div>
+    </div>
+    
+    <h2 style="margin-bottom: 20px;">📦 Your Collection</h2>
+    <div id="collectionList" class="cards-grid"></div>
+  </div>
+
+  <div id="trade" class="section">
+    <div class="trade-section">
+      <div class="trade-header">
+        <span class="trade-participant">You (Evan)</span>
+        <span class="trade-arrow">↔</span>
+        <span class="trade-participant">Alex</span>
+      </div>
+      
+      <div id="tradeRequests"></div>
+    </div>
+    
+    <h3 style="margin-bottom: 15px;">Your Tradeable Cards</h3>
+    <div id="tradeCards" class="cards-grid"></div>
+  </div>
+</div>
+
+<script>
+var app = {
+  cards: [],
+  trades: [],
+  
+  PSA_GRADES: {
+    10: { label: 'GEM-MT 10', cssClass: 'grade-10' },
+    9: { label: 'MINT 9', cssClass: 'grade-9' },
+    8: { label: 'NM-MT 8', cssClass: 'grade-8' },
+    7: { label: 'NM 7', cssClass: '' },
+    6: { label: 'EX-MT 6', cssClass: '' },
+    5: { label: 'EX 5', cssClass: '' },
+    4: { label: 'VG-EX 4', cssClass: '' },
+    3: { label: 'VG 3', cssClass: '' },
+    2: { label: 'GOOD 2', cssClass: '' },
+    1: { label: 'PR 1', cssClass: '' }
+  },
+  
+  init: function() {
+    this.cards = window.cardsData || [];
+    this.trades = window.tradesData || [];
+    this.showSection('scan');
+    this.render();
+  },
+  
+  showSection: function(sectionId) {
+    var sections = document.querySelectorAll('.section');
+    for (var i = 0; i < sections.length; i++) {
+      sections[i].classList.remove('active');
+    }
+    
+    var buttons = document.querySelectorAll('nav button');
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].classList.remove('active');
+    }
+    
+    document.getElementById(sectionId).classList.add('active');
+    var activeBtn = document.querySelector('[data-section="' + sectionId + '"]');
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    this.render();
+  },
+  
+  scanCard: function(event) {
+    var self = this;
+    var file = event.target.files[0];
+    if (!file) return;
+    
+    var scanStatus = document.getElementById('scanStatus');
+    scanStatus.innerHTML = '🔍 Scanning card... <span class="spinner"></span>';
+    
+    Tesseract.recognize(file, 'eng', {
+      logger: function(m) {
+        if (m.status === 'recognizing text') {
+          scanStatus.innerHTML = '🔍 Processing... ' + Math.round(m.progress * 100) + '% <span class="spinner"></span>';
+        }
+      }
+    }).then(function(result) {
+      var text = result.data.text;
+      scanStatus.innerHTML = '🔍 Identifying player with AI... <span class="spinner"></span>';
+      
+      self.detectPlayerWithAI(text).then(function(playerInfo) {
+        scanStatus.innerHTML = '🔍 Looking up team info... <span class="spinner"></span>';
+        
+        return self.detectTeamWithAI(text, playerInfo.player).then(function(team) {
+          var year = self.detectYear(text);
+          var cardNumber = self.detectCardNumber(text);
+          var psaGrade = self.detectGrade(text);
+          var value = self.estimateValue(psaGrade);
+          
+          var card = {
+            id: Date.now(),
+            player: playerInfo.player,
+            team: team,
+            year: year,
+            cardNumber: cardNumber,
+            owner: 1,
+            value: value,
+            psaGrade: psaGrade
+          };
+          
+          self.cards.push(card);
+          self.save();
+          
+          scanStatus.innerHTML = '✅ Card added! ' + playerInfo.player + ' (' + team + ') - PSA ' + psaGrade + ' - 
+  
+  detectPlayerWithAI: function(text) {
+    return fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: "I scanned a football card and got this text: \"" + text + "\"\n\nIdentify the football player's name from this text. This could be:\n- ANY NFL player (current, retired, Hall of Famers, rookies, backups, practice squad - anyone who ever had a card)\n- ANY college football player (past or present, from any division - D1, D2, D3, NAIA)\n- High school prospects who got early cards\n- Players from any era (1920s to present)\n\nLook carefully at the text for ANY name that could be a football player at any level.\n\nRespond in this EXACT format:\nPLAYER: [Full Name]\nLEVEL: [NFL/COLLEGE/HIGH_SCHOOL]\nTEAM_HINT: [Any team name you see in the text, or NONE]\n\nIf you cannot identify a player, respond with: UNKNOWN"
+        }]
+      })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      var result = data.content[0].text.trim();
+      if (result === "UNKNOWN" || result.length < 3) {
+        throw new Error("Player not found");
+      }
+      
+      var lines = result.split('\n');
+      var playerInfo = {
+        player: 'Unknown Player',
+        level: 'NFL',
+        teamHint: 'NONE'
+      };
+      
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i].indexOf('PLAYER:') !== -1) {
+          playerInfo.player = lines[i].replace('PLAYER:', '').trim();
+        }
+        if (lines[i].indexOf('LEVEL:') !== -1) {
+          playerInfo.level = lines[i].replace('LEVEL:', '').trim();
+        }
+        if (lines[i].indexOf('TEAM_HINT:') !== -1) {
+          playerInfo.teamHint = lines[i].replace('TEAM_HINT:', '').trim();
+        }
+      }
+      
+      return playerInfo;
+    });
+  },
+  
+  detectTeamWithAI: function(text, playerInfo) {
+    var self = this;
+    
+    if (playerInfo.teamHint && playerInfo.teamHint !== 'NONE') {
+      var detected = self.findTeamInText(playerInfo.teamHint);
+      if (detected) {
+        return Promise.resolve(detected);
+      }
+    }
+    
+    return fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: "I scanned a football card with this text: \"" + text + "\"\n\nThe player is: " + playerInfo.player + "\nLevel: " + playerInfo.level + "\n\nWhat team does this card show? Look carefully at the text for:\n- NFL team names (any current or historic team)\n- College team names (any D1, D2, D3, NAIA school)\n- High school names\n- CFL teams\n- AFL teams\n- XFL/USFL teams\n- International teams\n\nRespond with ONLY the full team name. Examples:\n- NFL: 'Green Bay Packers' or 'Los Angeles Rams'\n- College: 'Alabama Crimson Tide' or 'Ohio State Buckeyes' or just 'Alabama'\n- High School: 'St. Thomas Aquinas' or the school name\n- Historic: 'Houston Oilers' or 'Baltimore Colts'\n\nIf you cannot find a team in the text, use your knowledge of what team " + playerInfo.player + " played for. No explanation, just the team name."
+        }]
+      })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      return data.content[0].text.trim();
+    })
+    .catch(function() {
+      return 'Unknown Team';
+    });
+  },
+  
+  findTeamInText: function(hint) {
+    var allNFLTeams = {
+      'Cardinals': 'Arizona Cardinals',
+      'Falcons': 'Atlanta Falcons',
+      'Ravens': 'Baltimore Ravens',
+      'Bills': 'Buffalo Bills',
+      'Panthers': 'Carolina Panthers',
+      'Bears': 'Chicago Bears',
+      'Bengals': 'Cincinnati Bengals',
+      'Browns': 'Cleveland Browns',
+      'Cowboys': 'Dallas Cowboys',
+      'Broncos': 'Denver Broncos',
+      'Lions': 'Detroit Lions',
+      'Packers': 'Green Bay Packers',
+      'Texans': 'Houston Texans',
+      'Colts': 'Indianapolis Colts',
+      'Jaguars': 'Jacksonville Jaguars',
+      'Chiefs': 'Kansas City Chiefs',
+      'Raiders': 'Las Vegas Raiders',
+      'Chargers': 'Los Angeles Chargers',
+      'Rams': 'Los Angeles Rams',
+      'Dolphins': 'Miami Dolphins',
+      'Vikings': 'Minnesota Vikings',
+      'Patriots': 'New England Patriots',
+      'Saints': 'New Orleans Saints',
+      'Giants': 'New York Giants',
+      'Jets': 'New York Jets',
+      'Eagles': 'Philadelphia Eagles',
+      'Steelers': 'Pittsburgh Steelers',
+      '49ers': 'San Francisco 49ers',
+      'Seahawks': 'Seattle Seahawks',
+      'Buccaneers': 'Tampa Bay Buccaneers',
+      'Titans': 'Tennessee Titans',
+      'Commanders': 'Washington Commanders',
+      'Redskins': 'Washington Redskins',
+      'Oilers': 'Houston Oilers',
+      'Phoenix': 'Phoenix Cardinals'
+    };
+    
+    for (var team in allNFLTeams) {
+      if (hint.indexOf(team) !== -1) {
+        return allNFLTeams[team];
+      }
+    }
+    
+    var majorColleges = [
+      'Alabama', 'Georgia', 'Ohio State', 'Michigan', 'USC', 'Texas', 
+      'Oklahoma', 'LSU', 'Florida', 'Penn State', 'Notre Dame', 'Clemson',
+      'Auburn', 'Tennessee', 'Oregon', 'Miami', 'Florida State', 'Nebraska',
+      'Wisconsin', 'Stanford', 'UCLA', 'Michigan State', 'Iowa', 'Ole Miss',
+      'Texas A&M', 'South Carolina', 'Kentucky', 'Mississippi State', 'Vanderbilt',
+      'Arkansas', 'Missouri', 'Kansas', 'Kansas State', 'Oklahoma State',
+      'TCU', 'Baylor', 'Texas Tech', 'West Virginia', 'Washington', 'Colorado',
+      'Arizona', 'Arizona State', 'Utah', 'BYU', 'Boise State', 'Fresno State',
+      'San Diego State', 'Nevada', 'UNLV', 'Hawaii', 'Wyoming', 'New Mexico',
+      'Air Force', 'Army', 'Navy', 'Duke', 'North Carolina', 'NC State',
+      'Virginia', 'Virginia Tech', 'Georgia Tech', 'Louisville', 'Pittsburgh',
+      'Syracuse', 'Boston College', 'Wake Forest', 'Maryland', 'Rutgers'
+    ];
+    
+    for (var i = 0; i < majorColleges.length; i++) {
+      if (hint.indexOf(majorColleges[i]) !== -1) {
+        return majorColleges[i];
+      }
+    }
+    
+    return null;
+  },
+  
+  getFullTeamName: function(shortName) {
+    var teamMap = {
+      'Patriots': 'New England Patriots',
+      'Chiefs': 'Kansas City Chiefs',
+      'Bills': 'Buffalo Bills',
+      'Bengals': 'Cincinnati Bengals',
+      'Ravens': 'Baltimore Ravens',
+      'Eagles': 'Philadelphia Eagles',
+      'Texans': 'Houston Texans',
+      '49ers': 'San Francisco 49ers',
+      'Packers': 'Green Bay Packers',
+      'Cowboys': 'Dallas Cowboys',
+      'Steelers': 'Pittsburgh Steelers',
+      'Dolphins': 'Miami Dolphins',
+      'Vikings': 'Minnesota Vikings',
+      'Buccaneers': 'Tampa Bay Buccaneers',
+      'Cardinals': 'Arizona Cardinals',
+      'Falcons': 'Atlanta Falcons',
+      'Panthers': 'Carolina Panthers',
+      'Bears': 'Chicago Bears',
+      'Browns': 'Cleveland Browns',
+      'Broncos': 'Denver Broncos',
+      'Lions': 'Detroit Lions',
+      'Colts': 'Indianapolis Colts',
+      'Jaguars': 'Jacksonville Jaguars',
+      'Raiders': 'Las Vegas Raiders',
+      'Chargers': 'Los Angeles Chargers',
+      'Rams': 'Los Angeles Rams',
+      'Saints': 'New Orleans Saints',
+      'Giants': 'New York Giants',
+      'Jets': 'New York Jets',
+      'Seahawks': 'Seattle Seahawks',
+      'Titans': 'Tennessee Titans',
+      'Commanders': 'Washington Commanders',
+      'Redskins': 'Washington Redskins',
+      'Washington': 'Washington Commanders',
+      'Oilers': 'Houston Oilers',
+      'Phoenix': 'Phoenix Cardinals'
+    };
+    return teamMap[shortName] || shortName;
+  },
+  
+  detectYear: function(text) {
+    var yearMatch = text.match(/20(1[0-9]|2[0-5])/);
+    return yearMatch ? yearMatch[0] : new Date().getFullYear().toString();
+  },
+  
+  detectCardNumber: function(text) {
+    var numMatch = text.match(/#?\d{1,4}/);
+    return numMatch ? numMatch[0] : '#' + Math.floor(Math.random() * 500);
+  },
+  
+  detectGrade: function(text) {
+    if (text.indexOf('10') !== -1 || text.indexOf('GEM') !== -1) return 10;
+    if (text.indexOf('9') !== -1 || text.indexOf('MINT') !== -1) return 9;
+    if (text.indexOf('8') !== -1) return 8;
+    return 7 + Math.floor(Math.random() * 3);
+  },
+  
+  estimateValue: function(grade) {
+    var baseValue = 50;
+    var gradeMultiplier = {10: 5, 9: 3, 8: 2, 7: 1.5, 6: 1, 5: 0.8};
+    var multiplier = gradeMultiplier[grade] || 1;
+    return Math.floor(baseValue * multiplier + Math.random() * 100);
+  },
+  
+  addCardManually: function() {
+    var player = document.getElementById('playerName').value.trim();
+    var team = document.getElementById('team').value.trim();
+    var year = document.getElementById('year').value.trim();
+    var cardNumber = document.getElementById('cardNumber').value.trim();
+    var psaGrade = parseInt(document.getElementById('psaGrade').value);
+    var value = parseFloat(document.getElementById('cardValue').value) || 0;
+    
+    if (!player) {
+      this.showNotification('⚠️ Please enter a player name', '#f59e0b');
+      return;
+    }
+    
+    var card = {
+      id: Date.now(),
+      player: player,
+      team: team || 'Unknown Team',
+      year: year || new Date().getFullYear().toString(),
+      cardNumber: cardNumber || '#' + Math.floor(Math.random() * 500),
+      owner: 1,
+      value: value,
+      psaGrade: psaGrade,
+      level: 'NFL'
+    };
+    
+    this.cards.push(card);
+    this.save();
+    
+    document.getElementById('playerName').value = '';
+    document.getElementById('team').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('cardNumber').value = '';
+    document.getElementById('cardValue').value = '';
+    
+    this.showNotification('✅ Card added to collection!');
+    this.showSection('collection');
+  },
+  
+  deleteCard: function(cardId) {
+    if (confirm('Are you sure you want to delete this card?')) {
+      var newCards = [];
+      for (var i = 0; i < this.cards.length; i++) {
+        if (this.cards[i].id !== cardId) {
+          newCards.push(this.cards[i]);
+        }
+      }
+      this.cards = newCards;
+      this.save();
+      this.render();
+      this.showNotification('🗑️ Card removed from collection');
+    }
+  },
+  
+  offerTrade: function(cardId) {
+    var theirCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 2) {
+        theirCards.push(this.cards[i]);
+      }
+    }
+    
+    if (theirCards.length === 0) {
+      this.showNotification('⚠️ No cards available to trade', '#f59e0b');
+      return;
+    }
+    
+    var targetCard = theirCards[Math.floor(Math.random() * theirCards.length)];
+    
+    this.trades.push({
+      id: Date.now(),
+      offered: cardId,
+      requested: targetCard.id,
+      status: "pending"
+    });
+    
+    this.save();
+    this.render();
+    this.showNotification('📤 Trade offer sent!');
+  },
+  
+  acceptTrade: function(tradeId) {
+    var trade = null;
+    for (var i = 0; i < this.trades.length; i++) {
+      if (this.trades[i].id === tradeId) {
+        trade = this.trades[i];
+        break;
+      }
+    }
+    if (!trade) return;
+    
+    var cardA = null;
+    var cardB = null;
+    for (var j = 0; j < this.cards.length; j++) {
+      if (this.cards[j].id === trade.offered) cardA = this.cards[j];
+      if (this.cards[j].id === trade.requested) cardB = this.cards[j];
+    }
+    
+    var temp = cardA.owner;
+    cardA.owner = cardB.owner;
+    cardB.owner = temp;
+    
+    trade.status = "accepted";
+    this.save();
+    this.render();
+    this.showNotification('✅ Trade completed successfully!');
+  },
+  
+  render: function() {
+    this.renderStats();
+    this.renderCollection();
+    this.renderTrade();
+  },
+  
+  renderStats: function() {
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    var totalValue = 0;
+    for (var j = 0; j < myCards.length; j++) {
+      totalValue += myCards[j].value;
+    }
+    
+    var avgGrade = '-';
+    if (myCards.length > 0) {
+      var gradeSum = 0;
+      for (var k = 0; k < myCards.length; k++) {
+        gradeSum += myCards[k].psaGrade;
+      }
+      avgGrade = (gradeSum / myCards.length).toFixed(1);
+    }
+    
+    document.getElementById('totalCards').textContent = myCards.length;
+    document.getElementById('totalValue').textContent = '$' + totalValue.toFixed(2);
+    document.getElementById('avgGrade').textContent = avgGrade;
+  },
+  
+  renderCollection: function() {
+    var list = document.getElementById('collectionList');
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    if (myCards.length === 0) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><h3>No cards in your collection yet</h3><p>Scan a card or add one manually to get started!</p></div>';
+      return;
+    }
+    
+    var html = '';
+    for (var j = 0; j < myCards.length; j++) {
+      var c = myCards[j];
+      var gradeInfo = this.PSA_GRADES[c.psaGrade];
+      html += '<div class="card">';
+      html += '<div class="card-header">';
+      html += '<div>';
+      html += '<div class="player-name">' + c.player + '</div>';
+      html += '<div class="card-details">' + c.team + '<br>' + c.year + ' • ' + c.cardNumber + '</div>';
+      html += '</div>';
+      html += '<div class="psa-badge ' + gradeInfo.cssClass + '">PSA ' + c.psaGrade + '</div>';
+      html += '</div>';
+      html += '<div class="card-footer">';
+      html += '<div class="card-value"> + c.value.toFixed(2) + '</div>';
+      html += '<button onclick="app.deleteCard(' + c.id + ')" class="btn btn-danger">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+  },
+  
+  renderTrade: function() {
+    var tradeCardsDiv = document.getElementById('tradeCards');
+    var tradeRequestsDiv = document.getElementById('tradeRequests');
+    
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    if (myCards.length === 0) {
+      tradeCardsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🃏</div><p>Add cards to your collection first to start trading</p></div>';
+    } else {
+      var html = '';
+      for (var j = 0; j < myCards.length; j++) {
+        var c = myCards[j];
+        var gradeInfo = this.PSA_GRADES[c.psaGrade];
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += '<div>';
+        html += '<div class="player-name">' + c.player + '</div>';
+        html += '<div class="card-details">' + c.team + ' • ' + c.year + '</div>';
+        html += '</div>';
+        html += '<div class="psa-badge ' + gradeInfo.cssClass + '">PSA ' + c.psaGrade + '</div>';
+        html += '</div>';
+        html += '<div class="card-footer">';
+        html += '<div class="card-value"> + c.value.toFixed(2) + '</div>';
+        html += '<button onclick="app.offerTrade(' + c.id + ')" class="btn btn-primary">Offer Trade</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      tradeCardsDiv.innerHTML = html;
+    }
+    
+    var pendingTrades = [];
+    for (var k = 0; k < this.trades.length; k++) {
+      if (this.trades[k].status === 'pending') {
+        pendingTrades.push(this.trades[k]);
+      }
+    }
+    
+    if (pendingTrades.length === 0) {
+      tradeRequestsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No pending trade requests</p></div>';
+    } else {
+      var tradeHtml = '';
+      for (var m = 0; m < pendingTrades.length; m++) {
+        var t = pendingTrades[m];
+        var offeredCard = null;
+        var requestedCard = null;
+        
+        for (var n = 0; n < this.cards.length; n++) {
+          if (this.cards[n].id === t.offered) offeredCard = this.cards[n];
+          if (this.cards[n].id === t.requested) requestedCard = this.cards[n];
+        }
+        
+        tradeHtml += '<div class="trade-request">';
+        tradeHtml += '<div class="trade-info">';
+        tradeHtml += '<strong>📤 Offering:</strong> ' + offeredCard.player + ' (PSA ' + offeredCard.psaGrade + ') -  + offeredCard.value + '<br>';
+        tradeHtml += '<strong>📥 Requesting:</strong> ' + requestedCard.player + ' (PSA ' + requestedCard.psaGrade + ') -  + requestedCard.value;
+        tradeHtml += '</div>';
+        tradeHtml += '<button onclick="app.acceptTrade(' + t.id + ')" class="btn btn-success">Accept Trade</button>';
+        tradeHtml += '</div>';
+      }
+      tradeRequestsDiv.innerHTML = tradeHtml;
+    }
+  },
+  
+  save: function() {
+    window.cardsData = this.cards;
+    window.tradesData = this.trades;
+  },
+  
+  showNotification: function(message, color) {
+    color = color || '#10b981';
+    var notif = document.createElement('div');
+    notif.className = 'notification';
+    notif.style.background = color;
+    notif.textContent = message;
+    document.body.appendChild(notif);
+    
+    setTimeout(function() {
+      if (notif.parentNode) {
+        notif.parentNode.removeChild(notif);
+      }
+    }, 3000);
+  }
+};
+
+app.init();
+</script>
+
+</body>
+</html> + value;
+          
+          setTimeout(function() {
+            self.showSection('collection');
+          }, 2500);
+        });
+      }).catch(function(err) {
+        scanStatus.innerHTML = '❌ Could not identify player. Please add manually.';
+        console.error(err);
+      });
+    }).catch(function(err) {
+      scanStatus.innerHTML = '❌ Scan failed. Please try again or add manually.';
+      console.error(err);
+    });
+  },
+  
+  detectPlayerSimple: function(text) {
+    var commonPlayers = ['Brady', 'Mahomes', 'Allen', 'Burrow', 'Jackson', 'Hurts', 'Stroud', 
+      'Montana', 'Rice', 'Manning', 'Rodgers', 'Brees', 'Favre', 'Elway'];
+    
+    for (var i = 0; i < commonPlayers.length; i++) {
+      if (text.indexOf(commonPlayers[i]) !== -1) {
+        return this.getFullName(commonPlayers[i]);
+      }
+    }
+    
+    var words = text.split(/\s+/);
+    for (var j = 0; j < words.length - 1; j++) {
+      if (/^[A-Z][a-z]+$/.test(words[j]) && /^[A-Z][a-z]+$/.test(words[j + 1])) {
+        return words[j] + ' ' + words[j + 1];
+      }
+    }
+    
+    return 'Unknown Player';
+  },
+  
+  getFullName: function(lastName) {
+    var names = {
+      'Brady': 'Tom Brady',
+      'Mahomes': 'Patrick Mahomes',
+      'Allen': 'Josh Allen',
+      'Burrow': 'Joe Burrow',
+      'Jackson': 'Lamar Jackson',
+      'Hurts': 'Jalen Hurts',
+      'Stroud': 'CJ Stroud',
+      'Montana': 'Joe Montana',
+      'Rice': 'Jerry Rice',
+      'Manning': 'Peyton Manning',
+      'Rodgers': 'Aaron Rodgers',
+      'Brees': 'Drew Brees',
+      'Favre': 'Brett Favre',
+      'Elway': 'John Elway'
+    };
+    return names[lastName] || lastName;
+  },
+  
+  detectTeamSimple: function(text) {
+    var teams = ['Patriots', 'Chiefs', 'Bills', 'Bengals', 'Ravens', 'Eagles', 'Texans', 
+      '49ers', 'Packers', 'Cowboys', 'Steelers', 'Dolphins', 'Vikings', 'Buccaneers'];
+    
+    for (var i = 0; i < teams.length; i++) {
+      if (text.indexOf(teams[i]) !== -1) {
+        return this.getFullTeamName(teams[i]);
+      }
+    }
+    
+    return 'Unknown Team';
+  },
+  
+  getFullTeamName: function(shortName) {
+    var teamMap = {
+      'Patriots': 'New England Patriots',
+      'Chiefs': 'Kansas City Chiefs',
+      'Bills': 'Buffalo Bills',
+      'Bengals': 'Cincinnati Bengals',
+      'Ravens': 'Baltimore Ravens',
+      'Eagles': 'Philadelphia Eagles',
+      'Texans': 'Houston Texans',
+      '49ers': 'San Francisco 49ers',
+      'Packers': 'Green Bay Packers',
+      'Cowboys': 'Dallas Cowboys',
+      'Steelers': 'Pittsburgh Steelers',
+      'Dolphins': 'Miami Dolphins',
+      'Vikings': 'Minnesota Vikings',
+      'Buccaneers': 'Tampa Bay Buccaneers'
+    };
+    return teamMap[shortName] || shortName;
+  },
+  
+  detectYear: function(text) {
+    var yearMatch = text.match(/20(1[0-9]|2[0-5])/);
+    return yearMatch ? yearMatch[0] : new Date().getFullYear().toString();
+  },
+  
+  detectCardNumber: function(text) {
+    var numMatch = text.match(/#?\d{1,4}/);
+    return numMatch ? numMatch[0] : '#' + Math.floor(Math.random() * 500);
+  },
+  
+  detectGrade: function(text) {
+    if (text.indexOf('10') !== -1 || text.indexOf('GEM') !== -1) return 10;
+    if (text.indexOf('9') !== -1 || text.indexOf('MINT') !== -1) return 9;
+    if (text.indexOf('8') !== -1) return 8;
+    return 7 + Math.floor(Math.random() * 3);
+  },
+  
+  estimateValue: function(grade) {
+    var baseValue = 50;
+    var gradeMultiplier = {10: 5, 9: 3, 8: 2, 7: 1.5, 6: 1, 5: 0.8};
+    var multiplier = gradeMultiplier[grade] || 1;
+    return Math.floor(baseValue * multiplier + Math.random() * 100);
+  },
+  
+  addCardManually: function() {
+    var player = document.getElementById('playerName').value.trim();
+    var team = document.getElementById('team').value.trim();
+    var year = document.getElementById('year').value.trim();
+    var cardNumber = document.getElementById('cardNumber').value.trim();
+    var psaGrade = parseInt(document.getElementById('psaGrade').value);
+    var value = parseFloat(document.getElementById('cardValue').value) || 0;
+    
+    if (!player) {
+      this.showNotification('⚠️ Please enter a player name', '#f59e0b');
+      return;
+    }
+    
+    var card = {
+      id: Date.now(),
+      player: player,
+      team: team || 'Unknown Team',
+      year: year || new Date().getFullYear().toString(),
+      cardNumber: cardNumber || '#' + Math.floor(Math.random() * 500),
+      owner: 1,
+      value: value,
+      psaGrade: psaGrade
+    };
+    
+    this.cards.push(card);
+    this.save();
+    
+    document.getElementById('playerName').value = '';
+    document.getElementById('team').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('cardNumber').value = '';
+    document.getElementById('cardValue').value = '';
+    
+    this.showNotification('✅ Card added to collection!');
+    this.showSection('collection');
+  },
+  
+  deleteCard: function(cardId) {
+    if (confirm('Are you sure you want to delete this card?')) {
+      var newCards = [];
+      for (var i = 0; i < this.cards.length; i++) {
+        if (this.cards[i].id !== cardId) {
+          newCards.push(this.cards[i]);
+        }
+      }
+      this.cards = newCards;
+      this.save();
+      this.render();
+      this.showNotification('🗑️ Card removed from collection');
+    }
+  },
+  
+  offerTrade: function(cardId) {
+    var theirCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 2) {
+        theirCards.push(this.cards[i]);
+      }
+    }
+    
+    if (theirCards.length === 0) {
+      this.showNotification('⚠️ No cards available to trade', '#f59e0b');
+      return;
+    }
+    
+    var targetCard = theirCards[Math.floor(Math.random() * theirCards.length)];
+    
+    this.trades.push({
+      id: Date.now(),
+      offered: cardId,
+      requested: targetCard.id,
+      status: "pending"
+    });
+    
+    this.save();
+    this.render();
+    this.showNotification('📤 Trade offer sent!');
+  },
+  
+  acceptTrade: function(tradeId) {
+    var trade = null;
+    for (var i = 0; i < this.trades.length; i++) {
+      if (this.trades[i].id === tradeId) {
+        trade = this.trades[i];
+        break;
+      }
+    }
+    if (!trade) return;
+    
+    var cardA = null;
+    var cardB = null;
+    for (var j = 0; j < this.cards.length; j++) {
+      if (this.cards[j].id === trade.offered) cardA = this.cards[j];
+      if (this.cards[j].id === trade.requested) cardB = this.cards[j];
+    }
+    
+    var temp = cardA.owner;
+    cardA.owner = cardB.owner;
+    cardB.owner = temp;
+    
+    trade.status = "accepted";
+    this.save();
+    this.render();
+    this.showNotification('✅ Trade completed successfully!');
+  },
+  
+  render: function() {
+    this.renderStats();
+    this.renderCollection();
+    this.renderTrade();
+  },
+  
+  renderStats: function() {
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    var totalValue = 0;
+    for (var j = 0; j < myCards.length; j++) {
+      totalValue += myCards[j].value;
+    }
+    
+    var avgGrade = '-';
+    if (myCards.length > 0) {
+      var gradeSum = 0;
+      for (var k = 0; k < myCards.length; k++) {
+        gradeSum += myCards[k].psaGrade;
+      }
+      avgGrade = (gradeSum / myCards.length).toFixed(1);
+    }
+    
+    document.getElementById('totalCards').textContent = myCards.length;
+    document.getElementById('totalValue').textContent = '$' + totalValue.toFixed(2);
+    document.getElementById('avgGrade').textContent = avgGrade;
+  },
+  
+  renderCollection: function() {
+    var list = document.getElementById('collectionList');
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    if (myCards.length === 0) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><h3>No cards in your collection yet</h3><p>Scan a card or add one manually to get started!</p></div>';
+      return;
+    }
+    
+    var html = '';
+    for (var j = 0; j < myCards.length; j++) {
+      var c = myCards[j];
+      var gradeInfo = this.PSA_GRADES[c.psaGrade];
+      html += '<div class="card">';
+      html += '<div class="card-header">';
+      html += '<div>';
+      html += '<div class="player-name">' + c.player + '</div>';
+      html += '<div class="card-details">' + c.team + '<br>' + c.year + ' • ' + c.cardNumber + '</div>';
+      html += '</div>';
+      html += '<div class="psa-badge ' + gradeInfo.cssClass + '">PSA ' + c.psaGrade + '</div>';
+      html += '</div>';
+      html += '<div class="card-footer">';
+      html += '<div class="card-value"> + c.value.toFixed(2) + '</div>';
+      html += '<button onclick="app.deleteCard(' + c.id + ')" class="btn btn-danger">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+  },
+  
+  renderTrade: function() {
+    var tradeCardsDiv = document.getElementById('tradeCards');
+    var tradeRequestsDiv = document.getElementById('tradeRequests');
+    
+    var myCards = [];
+    for (var i = 0; i < this.cards.length; i++) {
+      if (this.cards[i].owner === 1) {
+        myCards.push(this.cards[i]);
+      }
+    }
+    
+    if (myCards.length === 0) {
+      tradeCardsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🃏</div><p>Add cards to your collection first to start trading</p></div>';
+    } else {
+      var html = '';
+      for (var j = 0; j < myCards.length; j++) {
+        var c = myCards[j];
+        var gradeInfo = this.PSA_GRADES[c.psaGrade];
+        html += '<div class="card">';
+        html += '<div class="card-header">';
+        html += '<div>';
+        html += '<div class="player-name">' + c.player + '</div>';
+        html += '<div class="card-details">' + c.team + ' • ' + c.year + '</div>';
+        html += '</div>';
+        html += '<div class="psa-badge ' + gradeInfo.cssClass + '">PSA ' + c.psaGrade + '</div>';
+        html += '</div>';
+        html += '<div class="card-footer">';
+        html += '<div class="card-value"> + c.value.toFixed(2) + '</div>';
+        html += '<button onclick="app.offerTrade(' + c.id + ')" class="btn btn-primary">Offer Trade</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      tradeCardsDiv.innerHTML = html;
+    }
+    
+    var pendingTrades = [];
+    for (var k = 0; k < this.trades.length; k++) {
+      if (this.trades[k].status === 'pending') {
+        pendingTrades.push(this.trades[k]);
+      }
+    }
+    
+    if (pendingTrades.length === 0) {
+      tradeRequestsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No pending trade requests</p></div>';
+    } else {
+      var tradeHtml = '';
+      for (var m = 0; m < pendingTrades.length; m++) {
+        var t = pendingTrades[m];
+        var offeredCard = null;
+        var requestedCard = null;
+        
+        for (var n = 0; n < this.cards.length; n++) {
+          if (this.cards[n].id === t.offered) offeredCard = this.cards[n];
+          if (this.cards[n].id === t.requested) requestedCard = this.cards[n];
+        }
+        
+        tradeHtml += '<div class="trade-request">';
+        tradeHtml += '<div class="trade-info">';
+        tradeHtml += '<strong>📤 Offering:</strong> ' + offeredCard.player + ' (PSA ' + offeredCard.psaGrade + ') -  + offeredCard.value + '<br>';
+        tradeHtml += '<strong>📥 Requesting:</strong> ' + requestedCard.player + ' (PSA ' + requestedCard.psaGrade + ') -  + requestedCard.value;
+        tradeHtml += '</div>';
+        tradeHtml += '<button onclick="app.acceptTrade(' + t.id + ')" class="btn btn-success">Accept Trade</button>';
+        tradeHtml += '</div>';
+      }
+      tradeRequestsDiv.innerHTML = tradeHtml;
+    }
+  },
+  
+  save: function() {
+    window.cardsData = this.cards;
+    window.tradesData = this.trades;
+  },
+  
+  showNotification: function(message, color) {
+    color = color || '#10b981';
+    var notif = document.createElement('div');
+    notif.className = 'notification';
+    notif.style.background = color;
+    notif.textContent = message;
+    document.body.appendChild(notif);
+    
+    setTimeout(function() {
+      if (notif.parentNode) {
+        notif.parentNode.removeChild(notif);
+      }
+    }, 3000);
+  }
+};
+
+app.init();
+</script>
+
+</body>
+</html>
